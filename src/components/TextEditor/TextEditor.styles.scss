@@ -1,0 +1,14 @@
+.editor {
+  max-width: 640px;
+  margin: 0 auto;
+
+  &__controls {
+    border: 1px solid black;
+  }
+
+  &__text-area {
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+  }
+}
