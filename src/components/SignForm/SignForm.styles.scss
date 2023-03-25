@@ -1,0 +1,138 @@
+.sign {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 56px 0 30px 0;
+  width: 260px;
+  margin: 0 auto;
+
+  @media screen and (min-width: 640px) {
+    align-items: flex-start;
+    padding: 232px 0 232px 0;
+    width: 396px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    padding: 70px 0;
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 29px;
+    text-align: center;
+    margin: 0;
+    padding: 50px 0 85px 0;
+
+    @media screen and (min-width: 640px) {
+      padding: 40px 0 45px 0;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__form-label {
+    position: relative;
+    top: -10px;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+  }
+
+  &__form-input {
+    box-sizing: border-box;
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    width: 260px;
+    padding: 15px;
+    margin-bottom: 1px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 50px white;
+    outline: 1px solid #ced4da;
+
+    @media screen and (min-width: 640px) {
+      width: 396px;
+    }
+
+    &:focus {
+      outline: 1px solid #868e96;
+    }
+  }
+
+  &__form-err-message {
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 12px;
+    margin: 0 0 6px 0;
+    color: #e64980;
+    height: 24px;
+    width: 260px;
+    overflow: hidden;
+
+    @media screen and (min-width: 640px) {
+      width: 396px;
+    }
+
+    &:last-of-type {
+      margin: 0;
+    }
+  }
+
+  &__form-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__form-btn {
+    appearance: none;
+    border: none;
+    background-color: #e64980;
+    color: white;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 400;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+
+    &:active {
+      box-shadow: none;
+      background-color: #d6336c;
+    }
+  }
+
+  &__form-invite {
+    margin: 14px 0 0 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+
+    @media screen and (min-width: 640px) {
+      margin: 16px 0 0 0;
+      font-size: 14px;
+      line-height: 17px;
+    }
+  }
+
+  &__form-link {
+    display: inline;
+    text-decoration: none;
+    margin-left: 7px;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
