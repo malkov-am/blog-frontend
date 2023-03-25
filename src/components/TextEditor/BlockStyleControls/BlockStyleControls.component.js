@@ -1,5 +1,6 @@
 import React from 'react';
 import StyleButton from '../StyleButton/StyleButton.component';
+import './BlockStyleControls.styles.scss';
 
 const BlockStyleControls = ({ onToggle }) => {
   const BLOCK_TYPES = [
@@ -12,7 +13,7 @@ const BlockStyleControls = ({ onToggle }) => {
     { label: 'Блок кода', style: 'code-block' },
   ];
   return (
-    <div>
+    <div className="editor__controls-block">
       {BLOCK_TYPES.map(({ label, style }) => (
         <StyleButton key={label} label={label} onToggle={onToggle} style={style} />
       ))}

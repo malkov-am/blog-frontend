@@ -1,0 +1,74 @@
+.editor__btn {
+  width: 32px;
+  height: 32px;
+  appearance: none;
+  border: 1px solid #e64980;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+
+  &:active {
+    box-shadow: none;
+    background-color: #fff0f6;
+  }
+
+  &_BOLD {
+    background: url('../../../images/text-editor/text-b.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_ITALIC {
+    background: url('../../../images/text-editor/text-italic.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_UNDERLINE {
+    background: url('../../../images/text-editor/text-underline.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_header-one {
+    background: url('../../../images/text-editor/text-h-one.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_header-two {
+    background: url('../../../images/text-editor/text-h-two.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_header-three {
+    background: url('../../../images/text-editor/text-h-three.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_blockquote {
+    background: url('../../../images/text-editor/quotes.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_unordered-list-item {
+    background: url('../../../images/text-editor/list-bullets.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_ordered-list-item {
+    background: url('../../../images/text-editor/list-numbers.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+
+  &_code-block {
+    background: url('../../../images/text-editor/code.svg') no-repeat;
+    background-size: 24px;
+    background-position: center;
+  }
+}

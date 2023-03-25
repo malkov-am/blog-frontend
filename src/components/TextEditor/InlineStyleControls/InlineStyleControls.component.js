@@ -1,5 +1,6 @@
 import React from 'react';
 import StyleButton from '../StyleButton/StyleButton.component';
+import './InlineStyleControls.styles.scss';
 
 const InlineStyleControls = ({ onToggle }) => {
   const INLINE_STYLES = [
@@ -8,7 +9,7 @@ const InlineStyleControls = ({ onToggle }) => {
     { label: 'Подчеркивание', style: 'UNDERLINE' },
   ];
   return (
-    <div>
+    <div className="editor__controls-inline">
       {INLINE_STYLES.map(({ label, style }) => (
         <StyleButton key={label} label={label} onToggle={onToggle} style={style} />
       ))}

@@ -1,5 +1,5 @@
 import { Editor, EditorState, RichUtils } from 'draft-js';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import BlockStyleControls from './BlockStyleControls/BlockStyleControls.component';
 import InlineStyleControls from './InlineStyleControls/InlineStyleControls.component';
 import { htmlToState, stateToHtml } from './convert';
@@ -9,6 +9,12 @@ const TextEditor = ({ content }) => {
   const [editorState, setEditorState] = useState(() =>
     content ? EditorState.createWithContent(htmlToState(content)) : EditorState.createEmpty(),
   );
+
+  const editor = useRef();
+
+  const focusOnInput = () => {
+    editor.current.focus();
+  };
 
   const toggleBlockType = (blockStyle) => {
     setEditorState(RichUtils.toggleBlockType(editorState, blockStyle));
@@ -29,10 +35,16 @@ const TextEditor = ({ content }) => {
         <BlockStyleControls onToggle={toggleBlockType} />
         <InlineStyleControls onToggle={toggleInlineStyle} />
       </div>
-      <div className="editor__text-area">
-        <Editor editorState={editorState} onChange={(editorState) => setEditorState(editorState)} />
+      <div className="editor__text-area" onClick={focusOnInput}>
+        <Editor
+          editorState={editorState}
+          onChange={(editorState) => setEditorState(editorState)}
+          ref={editor}
+        />
       </div>
-      <button onClick={submitText}>Сохранить</button>
+      <button className="editor__btn-save" onClick={submitText}>
+        Сохранить
+      </button>
     </div>
   );
 };

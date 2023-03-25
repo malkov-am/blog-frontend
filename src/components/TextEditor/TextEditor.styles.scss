@@ -1,14 +1,44 @@
 .editor {
   max-width: 640px;
   margin: 0 auto;
+  border: 1px solid #adb5bd;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 
   &__controls {
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
   }
 
   &__text-area {
     margin: 0;
     padding: 0;
-    border: 1px solid black;
+    border: 1px solid #adb5bd;
+    height: 50vh;
+    cursor: text;
+  }
+
+  &__btn-save {
+    appearance: none;
+    border: none;
+    background-color: #e64980;
+    color: white;
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 400;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+
+    &:active {
+      box-shadow: none;
+      background-color: #d6336c;
+    }
   }
 }
