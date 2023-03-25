@@ -1,5 +1,5 @@
 import React from 'react';
-import StyleButton from '../StyleButton/StyleButton.component';
+import StyleButton from '../TextEditor/StyleButton/StyleButton.component';
 
 const BlockStyleControls = ({ onToggle }) => {
   const BLOCK_TYPES = [
