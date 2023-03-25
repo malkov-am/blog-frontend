@@ -8,16 +8,16 @@ import './App.styles.scss';
 import { useState } from 'react';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const handleLogin = (userData) => {
     console.log(userData);
   };
   return (
     <div className="page">
-      <Header />
+      <Header isLoggedIn={isLoggedIn} />
       <main className="main">
         <Routes>
-          <Route exact path="/" element={<Posts />} />
+          <Route exact path="/" element={<Posts isLoggedIn={isLoggedIn} />} />
           <Route
             exact
             path="/signup"

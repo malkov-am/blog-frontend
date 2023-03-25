@@ -106,10 +106,15 @@
     font-weight: 400;
     cursor: pointer;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.4s linear;
 
     &:active {
       box-shadow: none;
       background-color: #d6336c;
+    }
+
+    &:hover {
+      opacity: 0.8;
     }
   }
 

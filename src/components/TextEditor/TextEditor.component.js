@@ -26,7 +26,7 @@ const TextEditor = ({ content }) => {
 
   const submitText = () => {
     const htmlMarkup = stateToHtml(editorState.getCurrentContent());
-    console.log(htmlMarkup);
+    console.log(JSON.stringify({ author: 'Андрей', content: htmlMarkup }));
   };
 
   return (

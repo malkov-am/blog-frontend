@@ -1,0 +1,41 @@
+.post {
+  border: 1px solid #ced4da;
+  border-radius: 7px;
+
+  &__content {
+    padding: 25px;
+  }
+
+  &__info {
+    border-top: 1px solid #ced4da;
+    height: 30px;
+    padding: 0 25px 0 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__author {
+    font-size: 12px;
+    line-height: 14px;
+    padding: 0;
+    margin: 0;
+    font-style: italic;
+  }
+
+  &__edit-btn {
+    appearance: none;
+    border: none;
+    background: url('../../images/post/pen.svg') no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: opacity 0.4s linear;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}

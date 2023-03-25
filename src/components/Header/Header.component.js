@@ -2,8 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.styles.scss';
 
-const Header = () => {
-  const isLoggedIn = false;
+const Header = ({ isLoggedIn }) => {
   return (
     <header className="header">
       <Link to="/" title="Домой" className="header__logo" />
