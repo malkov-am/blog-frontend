@@ -9,9 +9,11 @@ import { useState } from 'react';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   const handleLogin = (userData) => {
     console.log(userData);
   };
+
   return (
     <div className="page">
       <Header isLoggedIn={isLoggedIn} />
@@ -28,7 +30,7 @@ function App() {
             path="/signin"
             element={<Login onLogin={handleLogin} isLoggedIn={isLoggedIn} />}
           />
-          <Route exact path="/editor" element={<TextEditor />} />
+          <Route exact path="/edit" element={<TextEditor />} />
         </Routes>
       </main>
     </div>

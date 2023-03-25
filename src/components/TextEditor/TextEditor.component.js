@@ -43,7 +43,7 @@ const TextEditor = ({ content }) => {
         />
       </div>
       <button className="editor__btn-save" onClick={submitText}>
-        Сохранить
+        Опубликовать
       </button>
     </div>
   );

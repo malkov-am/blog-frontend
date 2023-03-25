@@ -7,7 +7,7 @@ const Posts = ({ isLoggedIn }) => {
   return (
     <div className="posts">
       {isLoggedIn && (
-        <Link to="/editor" className="posts__btn">
+        <Link to="/edit" className="posts__btn">
           Новый пост
         </Link>
       )}
