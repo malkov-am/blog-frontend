@@ -1,5 +1,5 @@
 import React from 'react';
-import StyleButton from '../TextEditor/StyleButton/StyleButton.component';
+import StyleButton from '../StyleButton/StyleButton.component';
 
 const InlineStyleControls = ({ onToggle }) => {
   const INLINE_STYLES = [

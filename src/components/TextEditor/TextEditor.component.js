@@ -1,7 +1,7 @@
 import { Editor, EditorState, RichUtils } from 'draft-js';
 import { useState } from 'react';
-import BlockStyleControls from '../BlockStyleControls/BlockStyleControls.component';
-import InlineStyleControls from '../InlineStyleControls/InlineStyleControls.component';
+import BlockStyleControls from './BlockStyleControls/BlockStyleControls.component';
+import InlineStyleControls from './InlineStyleControls/InlineStyleControls.component';
 import { htmlToState, stateToHtml } from './convert';
 import './TextEditor.styles.scss';
 
