@@ -4,12 +4,12 @@ import './BlockStyleControls.styles.scss';
 
 const BlockStyleControls = ({ onToggle }) => {
   const BLOCK_TYPES = [
-    { label: 'H1', style: 'header-one' },
-    { label: 'H2', style: 'header-two' },
-    { label: 'H3', style: 'header-three' },
+    { label: 'Заголовок 1 уровня', style: 'header-one' },
+    { label: 'Заголовок 2 уровня', style: 'header-two' },
+    { label: 'Заголовок 3 уровня', style: 'header-three' },
     { label: 'Цитата', style: 'blockquote' },
-    { label: 'UL', style: 'unordered-list-item' },
-    { label: 'OL', style: 'ordered-list-item' },
+    { label: 'Маркированный список', style: 'unordered-list-item' },
+    { label: 'Нумерованный список', style: 'ordered-list-item' },
     { label: 'Блок кода', style: 'code-block' },
   ];
   return (
