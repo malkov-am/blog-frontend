@@ -4,8 +4,12 @@ import BlockStyleControls from './BlockStyleControls/BlockStyleControls.componen
 import InlineStyleControls from './InlineStyleControls/InlineStyleControls.component';
 import { htmlToState, stateToHtml } from './convert';
 import './TextEditor.styles.scss';
+import { useLocation } from 'react-router';
 
-const TextEditor = ({ content }) => {
+const TextEditor = () => {
+  const location = useLocation();
+  const content = location.state?.content;
+
   const [editorState, setEditorState] = useState(() =>
     content ? EditorState.createWithContent(htmlToState(content)) : EditorState.createEmpty(),
   );

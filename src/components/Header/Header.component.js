@@ -1,23 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 import './Header.styles.scss';
 
 const Header = ({ isLoggedIn }) => {
+  const navigate = useNavigate();
   return (
     <header className="header">
       <Link to="/" title="Домой" className="header__logo" />
       <div className="header__wrapper">
         {isLoggedIn && <p className="header__username">Андрей</p>}
         {isLoggedIn ? (
-          <button className="header__sign-btn">Выход</button>
+          <Button buttonType={BUTTON_TYPE_CLASSES.sizeS}>Выход</Button>
         ) : (
           <>
-            <Link to="/signup" className="header__sign-btn">
+            <Button buttonType={BUTTON_TYPE_CLASSES.sizeS} onClick={() => navigate('/signup')}>
               Регистрация
-            </Link>
-            <Link to="signin" className="header__sign-btn">
+            </Button>
+            <Button buttonType={BUTTON_TYPE_CLASSES.sizeS} onClick={() => navigate('/signin')}>
               Вход
-            </Link>
+            </Button>
           </>
         )}
       </div>

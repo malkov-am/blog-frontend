@@ -26,31 +26,4 @@
     font-size: 16px;
     line-height: 18px;
   }
-
-  &__sign-btn {
-    appearance: none;
-    border: none;
-    font-size: 14px;
-    line-height: 16px;
-    cursor: pointer;
-    background-color: #e64980;
-    color: white;
-    border-radius: 6px;
-    height: 30px;
-    padding: 0px 10px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    transition: opacity 0.4s linear;
-
-    &:hover {
-      opacity: 0.8;
-    }
-
-    &:active {
-      box-shadow: none;
-      background-color: #d6336c;
-    }
-  }
 }

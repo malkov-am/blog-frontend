@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import SignForm from '../SignForm/SignForm.component';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import useValidation from '../../hooks/useValidation';
 import {
   NAME_MAX_LENGTH,
@@ -8,8 +8,10 @@ import {
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
 } from '../../utils/constants';
+import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 
 const Register = ({ onRegister, isLoggedIn }) => {
+  const navigate = useNavigate();
   // Валидация формы
   const { values, errors, isValid, handleChange, resetForms } = useValidation('.sign__form');
   // Сброс полей формы при открытии
@@ -79,19 +81,19 @@ const Register = ({ onRegister, isLoggedIn }) => {
         <p className="sign__form-err-message">{errors.password}</p>
       </div>
       <div className="sign__form-buttons">
-        <button
-          className="sign__form-btn"
+        <Button
+          buttonType={BUTTON_TYPE_CLASSES.sizeL}
           type="submit"
           isDisabled={!isValid}
           onClick={handleSubmit}
         >
           Зарегистрироваться
-        </button>
+        </Button>
         <p className="sign__form-invite">
           Уже зарегистрированы?
-          <Link className="sign__form-link" to="/signin">
+          <Button buttonType={BUTTON_TYPE_CLASSES.link} onClick={() => navigate('/signin')}>
             Войти
-          </Link>
+          </Button>
         </p>
       </div>
     </SignForm>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Post from '../Post/Post.component';
 import './Posts.styles.scss';
 
-const Posts = ({ isLoggedIn }) => {
+const Posts = ({ posts, isLoggedIn }) => {
   return (
     <div className="posts">
       {isLoggedIn && (
@@ -11,8 +11,9 @@ const Posts = ({ isLoggedIn }) => {
           Новый пост
         </Link>
       )}
-      <Post />
-      <Post />
+      {posts.map((post) => {
+        return <Post key={post.id} post={post}/>
+      })}
     </div>
   );
 };
