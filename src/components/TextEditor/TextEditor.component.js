@@ -5,13 +5,14 @@ import InlineStyleControls from './InlineStyleControls/InlineStyleControls.compo
 import { htmlToState, stateToHtml } from './convert';
 import './TextEditor.styles.scss';
 import { useLocation } from 'react-router';
+import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 
-const TextEditor = () => {
+const TextEditor = ({ onPublish }) => {
   const location = useLocation();
-  const content = location.state?.content;
+  const post = location.state?.post;
 
   const [editorState, setEditorState] = useState(() =>
-    content ? EditorState.createWithContent(htmlToState(content)) : EditorState.createEmpty(),
+    post ? EditorState.createWithContent(htmlToState(post.content)) : EditorState.createEmpty(),
   );
 
   const editor = useRef();
@@ -28,9 +29,9 @@ const TextEditor = () => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
-  const submitText = () => {
+  const publish = () => {
     const htmlMarkup = stateToHtml(editorState.getCurrentContent());
-    console.log(JSON.stringify({ author: 'Андрей', content: htmlMarkup }));
+    onPublish(post, htmlMarkup);
   };
 
   return (
@@ -46,9 +47,9 @@ const TextEditor = () => {
           ref={editor}
         />
       </div>
-      <button className="editor__btn-save" onClick={submitText}>
+      <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={publish}>
         Опубликовать
-      </button>
+      </Button>
     </div>
   );
 };
