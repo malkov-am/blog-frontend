@@ -5,6 +5,10 @@
   gap: 10px;
   padding: 10px 0 10px 0;
 
+  &__notification {
+    color: grey;
+  }
+
   &__btn {
     background-color: #e64980;
     color: white;

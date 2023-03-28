@@ -24,19 +24,4 @@
     margin: 0;
     font-style: italic;
   }
-
-  &__edit-btn {
-    appearance: none;
-    border: none;
-    background: url('../../images/post/pen.svg') no-repeat;
-    background-size: contain;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    transition: opacity 0.4s linear;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
 }

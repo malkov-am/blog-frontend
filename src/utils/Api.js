@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'http://localhost:3001';
 
 // Обработка ответа с сервера
 function handleResponse(res) {
@@ -38,12 +38,9 @@ export const checkToken = (token) => {
 };
 
 // Получение постов
-export const getPosts = (token) => {
+export const getPosts = () => {
   return fetch(`${BASE_URL}/posts`, {
     method: 'GET',
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
   }).then((res) => handleResponse(res));
 };
 
@@ -60,8 +57,8 @@ export const createPost = (post, token) => {
 };
 
 // Редактирование поста
-export const editPost = (post, token) => {
-  return fetch(`${BASE_URL}/posts`, {
+export const editPost = (post, postId, token) => {
+  return fetch(`${BASE_URL}/posts/${postId}`, {
     method: 'PATCH',
     headers: {
       authorization: `Bearer ${token}`,

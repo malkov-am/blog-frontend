@@ -2,6 +2,7 @@
   appearance: none;
   border: none;
   cursor: pointer;
+  transition: opacity 0.4s linear;
 
   &_type_size-s {
     font-size: 14px;
@@ -15,10 +16,9 @@
     text-decoration: none;
     display: flex;
     align-items: center;
-    transition: opacity 0.4s linear;
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.7;
     }
 
     &:active {
@@ -37,7 +37,6 @@
     line-height: 18px;
     font-weight: 400;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-    transition: opacity 0.4s linear;
 
     &:active {
       box-shadow: none;
@@ -45,7 +44,7 @@
     }
 
     &:hover {
-      opacity: 0.8;
+      opacity: 0.7;
     }
   }
 
@@ -55,6 +54,28 @@
     margin-left: 3px;
     padding: 0;
     background: none;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &_type_pen {
+    background: url('../../images/post/pen.svg') no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &_type_trash {
+    background: url('../../images/post/trash.svg') no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
 
     &:hover {
       opacity: 0.7;

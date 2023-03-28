@@ -6,6 +6,8 @@ export const BUTTON_TYPE_CLASSES = {
   sizeS: 'size-s',
   sizeL: 'size-l',
   link: 'link',
+  pen: 'pen',
+  trash: 'trash',
 };
 
 const Button = ({ buttonType, isDisabled, children, ...otherProps }) => {
