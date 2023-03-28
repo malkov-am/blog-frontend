@@ -29,7 +29,7 @@ const Register = ({ onRegister, isLoggedIn }) => {
   };
 
   if (isLoggedIn) {
-    return <Navigate to="/movies" />;
+    return <Navigate to="/" />;
   }
 
   return (

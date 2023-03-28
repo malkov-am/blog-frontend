@@ -106,7 +106,7 @@ function App() {
     localStorage.clear();
     setIsLoggedIn(false);
     setCurrentUser({});
-    navigate('/');
+    navigate('/signin');
   }
 
   // Обработчик публикации нового поста
