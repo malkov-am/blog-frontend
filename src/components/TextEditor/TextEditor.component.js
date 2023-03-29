@@ -66,7 +66,11 @@ const TextEditor = ({ onSubmit, isLoading }) => {
       <div className="editor__controls">
         <div className="editor__controls-block-wrapper">
           <BlockStyleControls onToggle={toggleBlockType} />
-          <Button buttonType={BUTTON_TYPE_CLASSES.close} onClick={() => navigate(-1)} />
+          <Button
+            buttonType={BUTTON_TYPE_CLASSES.close}
+            label="Закрыть"
+            onClick={() => navigate(-1)}
+          />
         </div>
         <InlineStyleControls onToggle={toggleInlineStyle} />
         <StyleButton onToggle={handlerAddLink} style="link" label="Вставить ссылку" />
