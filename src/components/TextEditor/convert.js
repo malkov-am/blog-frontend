@@ -41,6 +41,16 @@ export const stateToHtml = convertToHTML({
         return null;
     }
   },
+  entityToHTML: (entity, text) => {
+    if (entity.type === 'link') {
+      return (
+        <a href={entity.data.url}>
+          {text}
+        </a>
+      );
+    }
+    return text;
+  },
 });
 
 export const htmlToState = convertFromHTML({
@@ -79,5 +89,11 @@ export const htmlToState = convertFromHTML({
       default:
         return null;
     }
+  },
+  htmlToEntity: (nodeName, node, createEntity) => {
+    if (nodeName === 'a' && node.href) {
+      return createEntity('link', 'MUTABLE', { url: node.href });
+    }
+    return undefined;
   },
 });
