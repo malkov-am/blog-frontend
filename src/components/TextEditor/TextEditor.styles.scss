@@ -47,4 +47,16 @@
       background-color: #d6336c;
     }
   }
+
+  &__file-input {
+    &::file-selector-button {
+      appearance: none;
+      border: none;
+      background: url('../../images/text-editor/file.svg') no-repeat;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      color: rgba(0, 0, 0, 0);
+    }
+  }
 }

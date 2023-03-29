@@ -17,6 +17,7 @@ const TextEditor = ({ onSubmit, isLoading }) => {
   const postId = post?._id;
   const decorator = new CompositeDecorator([LinkDecorator]);
 
+  const [file, setFile] = useState('');
   const [editorState, setEditorState] = useState(() =>
     post
       ? EditorState.createWithContent(htmlToState(post.content), decorator)
@@ -24,6 +25,7 @@ const TextEditor = ({ onSubmit, isLoading }) => {
   );
 
   const editor = useRef();
+  const fileInputRef = useRef('');
 
   const focusOnInput = () => {
     editor.current.focus();
@@ -39,7 +41,7 @@ const TextEditor = ({ onSubmit, isLoading }) => {
 
   const submit = () => {
     const content = stateToHtml(editorState.getCurrentContent());
-    onSubmit(content, postId);
+    onSubmit(content, postId, file);
   };
 
   const addEntity = (entityType, data, mutability) => {
@@ -60,6 +62,10 @@ const TextEditor = ({ onSubmit, isLoading }) => {
     const url = prompt('URL');
     url && addLink(url);
   };
+
+  function handleAttachFile(evt) {
+    setFile(evt.target.files[0]);
+  }
 
   return (
     <div className="editor">
@@ -82,6 +88,12 @@ const TextEditor = ({ onSubmit, isLoading }) => {
           ref={editor}
         />
       </div>
+      <input
+        className="editor__file-input"
+        type="file"
+        ref={fileInputRef}
+        onChange={handleAttachFile}
+      ></input>
       <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
         Опубликовать
       </Button>

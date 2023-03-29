@@ -18,6 +18,9 @@ import {
 import { UNAUTHORIZED_ERROR_CODE, POPUP_DELAY_TIME } from '../../utils/constants';
 import InfoPopup from '../InfoPopup/InfoPopup.component';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { firebaseConfig } from '../../utils/firebase';
+import { initializeApp } from 'firebase/app';
 
 function App() {
   // Переменные состояния
@@ -32,6 +35,10 @@ function App() {
 
   // Хуки
   const navigate = useNavigate();
+
+  // Firebase storage
+  const firebaseApp = initializeApp(firebaseConfig);
+  const storage = getStorage();
 
   // Чтение локального хранилища
   const token = localStorage.getItem('token');
@@ -143,13 +150,35 @@ function App() {
       .finally(() => setIsLoading(false));
   };
 
-  // Обработчик отправки формы текстового редактора
-  const handleTextEditorSubmit = (content, postId) => {
-    const postData = { content };
+  const handlePost = (postData, postId) => {
     if (postId) {
       handleEditPost(postData, postId);
     } else {
       handleCreatePost(postData);
+    }
+  };
+
+  // Обработчик отправки формы текстового редактора
+  const handleTextEditorSubmit = (content, postId, file) => {
+    if (file) {
+      const storageRef = ref(storage, `/files/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      return uploadTask.on(
+        'state_changed',
+        function (snapshot) {},
+        function (err) {
+          handleError(err);
+        },
+        function () {
+          getDownloadURL(uploadTask.snapshot.ref).then((filelink) => {
+            const postData = { content, filename: file.name, filelink };
+            handlePost(postData, postId);
+          });
+        },
+      );
+    } else {
+      const postData = { content };
+      handlePost(postData, postId);
     }
   };
 
@@ -176,20 +205,37 @@ function App() {
               exact
               path="/"
               element={
-                <Posts posts={posts} isLoggedIn={isLoggedIn} onDeletePost={handleDeletePost} isLoadingPosts={isLoadingPosts} />
+                <Posts
+                  posts={posts}
+                  isLoggedIn={isLoggedIn}
+                  onDeletePost={handleDeletePost}
+                  isLoadingPosts={isLoadingPosts}
+                />
               }
             />
             <Route
               exact
               path="/signup"
-              element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} isLoading={isLoading} />}
+              element={
+                <Register
+                  onRegister={handleRegister}
+                  isLoggedIn={isLoggedIn}
+                  isLoading={isLoading}
+                />
+              }
             />
             <Route
               exact
               path="/signin"
-              element={<Login onLogin={handleLogin} isLoggedIn={isLoggedIn} isLoading={isLoading} />}
+              element={
+                <Login onLogin={handleLogin} isLoggedIn={isLoggedIn} isLoading={isLoading} />
+              }
             />
-            <Route exact path="/edit" element={<TextEditor onSubmit={handleTextEditorSubmit} isLoading={isLoading} />} />
+            <Route
+              exact
+              path="/edit"
+              element={<TextEditor onSubmit={handleTextEditorSubmit} isLoading={isLoading} />}
+            />
           </Routes>
         </main>
       </CurrentUserContext.Provider>
