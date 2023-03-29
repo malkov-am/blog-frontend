@@ -9,12 +9,18 @@ export const BUTTON_TYPE_CLASSES = {
   link: 'link',
   pen: 'pen',
   trash: 'trash',
+  close: 'close',
 };
 
 const Button = ({ buttonType, isDisabled, isLoading, children, ...otherProps }) => {
   return (
     <button
-      className={clsx('button', `button_type_${buttonType}`, isDisabled && `button_disabled`, isLoading && `button_disabled`)}
+      className={clsx(
+        'button',
+        `button_type_${buttonType}`,
+        isDisabled && `button_disabled`,
+        isLoading && `button_disabled`,
+      )}
       {...otherProps}
     >
       {isLoading ? <Spinner /> : children}
