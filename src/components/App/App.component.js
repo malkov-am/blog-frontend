@@ -27,6 +27,8 @@ function App() {
   const [infoPopupMessage, setInfoPopupMessage] = useState('');
   const [infoPopupType, setInfoPopupType] = useState('');
   const [isInfoPopupShown, setIsInfoPopupShown] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(false);
 
   // Хуки
   const navigate = useNavigate();
@@ -37,13 +39,15 @@ function App() {
   // Действия при загрузке приложения: проверяем токен
   useEffect(() => {
     token ? handleTokenCheck(token) : setIsLoggedIn(false);
+    setIsLoadingPosts(true);
     getPosts()
       .then((posts) => {
         setPosts(posts.reverse());
       })
       .catch((err) => {
         handleError(err);
-      });
+      })
+      .finally(() => setIsLoadingPosts(false));
   }, []);
 
   // Обработчик проверки токена
@@ -80,6 +84,7 @@ function App() {
 
   // Обработчик логина
   function handleLogin(userData) {
+    setIsLoading(true);
     authorize(userData)
       .then((data) => {
         if (data.token) {
@@ -88,17 +93,20 @@ function App() {
           navigate('/');
         }
       })
-      .catch((err) => handleError(err));
+      .catch((err) => handleError(err))
+      .finally(() => setIsLoading(false));
   }
 
   // Обработчик регистрации
   function handleRegister(userData) {
     const { email, password } = userData;
+    setIsLoading(true);
     register(userData)
       .then(() => {
         handleLogin({ email, password });
       })
-      .catch((err) => handleError(err));
+      .catch((err) => handleError(err))
+      .finally(() => setIsLoading(false));
   }
 
   // Обработчик выхода из профиля
@@ -111,24 +119,28 @@ function App() {
 
   // Обработчик публикации нового поста
   const handleCreatePost = (postData) => {
+    setIsLoading(true);
     createPost(postData, token)
       .then((newPost) => {
         setPosts([newPost, ...posts]);
         showInfoPopup('success', 'Пост опубликован');
         navigate('/');
       })
-      .catch((err) => handleError(err));
+      .catch((err) => handleError(err))
+      .finally(() => setIsLoading(false));
   };
 
   // Обработчик редактирования поста
   const handleEditPost = (postData, postId) => {
+    setIsLoading(true);
     editPost(postData, postId, token)
       .then((updatedPost) => {
         setPosts(posts.map((post) => (post._id === postId ? updatedPost : post)));
         showInfoPopup('success', 'Пост отредактирован');
         navigate('/');
       })
-      .catch((err) => handleError(err));
+      .catch((err) => handleError(err))
+      .finally(() => setIsLoading(false));
   };
 
   // Обработчик отправки формы текстового редактора
@@ -164,20 +176,20 @@ function App() {
               exact
               path="/"
               element={
-                <Posts posts={posts} isLoggedIn={isLoggedIn} onDeletePost={handleDeletePost} />
+                <Posts posts={posts} isLoggedIn={isLoggedIn} onDeletePost={handleDeletePost} isLoadingPosts={isLoadingPosts} />
               }
             />
             <Route
               exact
               path="/signup"
-              element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} />}
+              element={<Register onRegister={handleRegister} isLoggedIn={isLoggedIn} isLoading={isLoading} />}
             />
             <Route
               exact
               path="/signin"
-              element={<Login onLogin={handleLogin} isLoggedIn={isLoggedIn} />}
+              element={<Login onLogin={handleLogin} isLoggedIn={isLoggedIn} isLoading={isLoading} />}
             />
-            <Route exact path="/edit" element={<TextEditor onSubmit={handleTextEditorSubmit} />} />
+            <Route exact path="/edit" element={<TextEditor onSubmit={handleTextEditorSubmit} isLoading={isLoading} />} />
           </Routes>
         </main>
       </CurrentUserContext.Provider>

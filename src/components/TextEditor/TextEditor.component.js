@@ -7,7 +7,7 @@ import './TextEditor.styles.scss';
 import { useLocation } from 'react-router';
 import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 
-const TextEditor = ({ onSubmit }) => {
+const TextEditor = ({ onSubmit, isLoading }) => {
   const location = useLocation();
   const post = location.state?.post;
   const postId = post?._id;
@@ -48,7 +48,7 @@ const TextEditor = ({ onSubmit }) => {
           ref={editor}
         />
       </div>
-      <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit}>
+      <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
         Опубликовать
       </Button>
     </div>

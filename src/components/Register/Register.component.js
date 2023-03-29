@@ -10,7 +10,7 @@ import {
 } from '../../utils/constants';
 import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 
-const Register = ({ onRegister, isLoggedIn }) => {
+const Register = ({ onRegister, isLoggedIn, isLoading }) => {
   const navigate = useNavigate();
   // Валидация формы
   const { values, errors, isValid, handleChange, resetForms } = useValidation('.sign__form');
@@ -85,6 +85,7 @@ const Register = ({ onRegister, isLoggedIn }) => {
           buttonType={BUTTON_TYPE_CLASSES.sizeL}
           type="submit"
           isDisabled={!isValid}
+          isLoading={isLoading}
           onClick={handleSubmit}
         >
           Зарегистрироваться

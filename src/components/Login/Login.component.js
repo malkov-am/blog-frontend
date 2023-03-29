@@ -5,7 +5,7 @@ import useValidation from '../../hooks/useValidation';
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '../../utils/constants';
 import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 
-const Login = ({ onLogin, isLoggedIn }) => {
+const Login = ({ onLogin, isLoggedIn, isLoading }) => {
   const navigate = useNavigate();
   // Валидация формы
   const { values, errors, isValid, handleChange, resetForms } = useValidation('.sign__form');
@@ -61,6 +61,7 @@ const Login = ({ onLogin, isLoggedIn }) => {
           buttonType={BUTTON_TYPE_CLASSES.sizeL}
           type="submit"
           isDisabled={!isValid}
+          isLoading={isLoading}
           onClick={handleSubmit}
         >
           Войти

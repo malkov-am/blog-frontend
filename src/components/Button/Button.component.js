@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
+import Spinner from '../Spinner/Spinner';
 import './Button.styles.scss';
 
 export const BUTTON_TYPE_CLASSES = {
@@ -10,13 +11,13 @@ export const BUTTON_TYPE_CLASSES = {
   trash: 'trash',
 };
 
-const Button = ({ buttonType, isDisabled, children, ...otherProps }) => {
+const Button = ({ buttonType, isDisabled, isLoading, children, ...otherProps }) => {
   return (
     <button
-      className={clsx('button', `button_type_${buttonType}`, isDisabled && `button_disabled`)}
+      className={clsx('button', `button_type_${buttonType}`, isDisabled && `button_disabled`, isLoading && `button_disabled`)}
       {...otherProps}
     >
-      {children}
+      {isLoading ? <Spinner /> : children}
     </button>
   );
 };
