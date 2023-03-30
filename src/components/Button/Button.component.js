@@ -6,6 +6,7 @@ import './Button.styles.scss';
 export const BUTTON_TYPE_CLASSES = {
   sizeS: 'size-s',
   sizeL: 'size-l',
+  sizeLTransparent: 'size-l-transparent',
   link: 'link',
   pen: 'pen',
   trash: 'trash',

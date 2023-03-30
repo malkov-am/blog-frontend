@@ -1,5 +1,5 @@
 import { Editor, EditorState, RichUtils } from 'draft-js';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import BlockStyleControls from './BlockStyleControls/BlockStyleControls.component';
 import InlineStyleControls from './InlineStyleControls/InlineStyleControls.component';
 import { htmlToState, stateToHtml } from './convert';
@@ -9,6 +9,8 @@ import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 import { CompositeDecorator } from 'draft-js';
 import LinkDecorator from './Link';
 import StyleButton from './StyleButton/StyleButton.component';
+import Post from '../Post/Post.component';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 const TextEditor = ({ onSubmit, isLoading }) => {
   const location = useLocation();
@@ -23,6 +25,9 @@ const TextEditor = ({ onSubmit, isLoading }) => {
       ? EditorState.createWithContent(htmlToState(post.content), decorator)
       : EditorState.createEmpty(decorator),
   );
+  const [postPreview, setPostPreview] = useState(null);
+
+  const currentUser = useContext(CurrentUserContext);
 
   const editor = useRef();
   const fileInputRef = useRef('');
@@ -63,11 +68,18 @@ const TextEditor = ({ onSubmit, isLoading }) => {
     url && addLink(url);
   };
 
-  function handleAttachFile(evt) {
+  const handleAttachFile = (evt) => {
     setFile(evt.target.files[0]);
   }
 
+  const handleOpenPreview = () => {
+    const content = stateToHtml(editorState.getCurrentContent());
+     setPostPreview({ owner: currentUser, content, _id: null });
+  }
+
   return (
+    <>
+    <Post post={postPreview} isPreview={true} />
     <div className="editor">
       <div className="editor__controls">
         <div className="editor__controls-block-wrapper">
@@ -94,10 +106,16 @@ const TextEditor = ({ onSubmit, isLoading }) => {
         ref={fileInputRef}
         onChange={handleAttachFile}
       ></input>
-      <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
-        Опубликовать
-      </Button>
+      <div className='editor__submit-btns'>
+        <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
+          Опубликовать
+        </Button>
+        <Button buttonType={BUTTON_TYPE_CLASSES.sizeLTransparent} onClick={handleOpenPreview}>
+          Предпросмотр
+        </Button>
+      </div>
     </div>
+    </>
   );
 };
 

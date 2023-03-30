@@ -1,12 +1,13 @@
 .editor {
   margin: 0 auto;
+  box-sizing: border-box;
+  width: 100%;
   border: 1px solid #adb5bd;
   border-radius: 5px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-  margin-top: 25px;
 
   &__controls {
     display: flex;
@@ -28,26 +29,6 @@
     cursor: text;
   }
 
-  &__btn-save {
-    appearance: none;
-    border: none;
-    background-color: #e64980;
-    color: white;
-    width: 200px;
-    height: 40px;
-    border-radius: 10px;
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: 400;
-    cursor: pointer;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-
-    &:active {
-      box-shadow: none;
-      background-color: #d6336c;
-    }
-  }
-
   &__file-input {
     &::file-selector-button {
       appearance: none;
@@ -58,5 +39,11 @@
       height: 32px;
       color: rgba(0, 0, 0, 0);
     }
+  }
+
+  &__submit-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
   }
 }

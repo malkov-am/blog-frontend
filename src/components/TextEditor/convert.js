@@ -44,7 +44,7 @@ export const stateToHtml = convertToHTML({
   entityToHTML: (entity, text) => {
     if (entity.type === 'link') {
       return (
-        <a href={entity.data.url}>
+        <a href={entity.data.url} target="_blank" rel="noreferrer">
           {text}
         </a>
       );

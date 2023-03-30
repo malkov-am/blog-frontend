@@ -4,13 +4,12 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
 import './Post.styles.scss';
 
-const Post = ({ post, onDeletePost }) => {
+const Post = ({ post, onDeletePost, isPreview }) => {
+  const currentUser = useContext(CurrentUserContext);
+  const navigate = useNavigate();
+  if (!post) return null;
   const { owner, content, _id: postId, filename, filelink } = post;
   const { name, _id: ownerId } = owner;
-
-  const currentUser = useContext(CurrentUserContext);
-
-  const navigate = useNavigate();
 
   const postEdit = () => {
     navigate('/edit', { state: { post: post } });
@@ -33,7 +32,7 @@ const Post = ({ post, onDeletePost }) => {
       </div>
       <div className="post__info">
         <p className="post__author">Автор: {name}</p>
-        {currentUser._id === ownerId && (
+        {!isPreview && currentUser._id === ownerId && (
           <div>
             <Button buttonType={BUTTON_TYPE_CLASSES.pen} onClick={postEdit} title="Редактировать" />
             <Button
