@@ -132,7 +132,7 @@ const TextEditor = ({ onSubmit, isLoading }) => {
         <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
           Опубликовать
         </Button>
-        <Button buttonType={BUTTON_TYPE_CLASSES.sizeLTransparent} onClick={handleOpenPreview}>
+        <Button buttonType={BUTTON_TYPE_CLASSES.sizeLTransparent} onClick={handleOpenPreview} isDisabled={isLoading}>
           Предпросмотр
         </Button>
       </div>
