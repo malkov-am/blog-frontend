@@ -21,12 +21,19 @@
     justify-content: space-between;
   }
 
+  &__controls-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;;
+  }
+
   &__text-area {
     margin: 0;
     padding: 0;
     border: 1px solid #adb5bd;
     height: 50vh;
     cursor: text;
+    overflow: scroll;
   }
 
   &__file-input {

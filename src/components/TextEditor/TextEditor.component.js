@@ -1,4 +1,4 @@
-import { Editor, EditorState, RichUtils } from 'draft-js';
+import { Editor, EditorState, RichUtils, AtomicBlockUtils, CompositeDecorator } from 'draft-js';
 import { useContext, useRef, useState } from 'react';
 import BlockStyleControls from './BlockStyleControls/BlockStyleControls.component';
 import InlineStyleControls from './InlineStyleControls/InlineStyleControls.component';
@@ -6,8 +6,8 @@ import { htmlToState, stateToHtml } from './convert';
 import './TextEditor.styles.scss';
 import { useLocation, useNavigate } from 'react-router';
 import Button, { BUTTON_TYPE_CLASSES } from '../Button/Button.component';
-import { CompositeDecorator } from 'draft-js';
 import LinkDecorator from './Link';
+import ImageDecorator from './Image';
 import StyleButton from './StyleButton/StyleButton.component';
 import Post from '../Post/Post.component';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
@@ -17,7 +17,7 @@ const TextEditor = ({ onSubmit, isLoading }) => {
   const navigate = useNavigate();
   const post = location.state?.post;
   const postId = post?._id;
-  const decorator = new CompositeDecorator([LinkDecorator]);
+  const decorator = new CompositeDecorator([LinkDecorator, ImageDecorator]);
 
   const [file, setFile] = useState('');
   const [editorState, setEditorState] = useState(() =>
@@ -59,6 +59,16 @@ const TextEditor = ({ onSubmit, isLoading }) => {
     });
   };
 
+  const addAtomicBlock = (entityType, data, mutability) => {
+    setEditorState((currentState) => {
+      const contentState = currentState.getCurrentContent();
+      const contentStateWithEntity = contentState.createEntity(entityType, mutability, data);
+      const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+      const newState = EditorState.set( editorState, { currentContent: contentStateWithEntity });
+      return AtomicBlockUtils.insertAtomicBlock(newState, entityKey, ' ');
+  });
+};
+
   const addLink = (url) => {
     return addEntity('link', { url }, 'MUTABLE');
   };
@@ -66,6 +76,15 @@ const TextEditor = ({ onSubmit, isLoading }) => {
   const handlerAddLink = () => {
     const url = prompt('URL');
     url && addLink(url);
+  };
+
+  const addImage = (url) => {
+    return addAtomicBlock('image', { url }, 'IMMUTABLE');
+  };
+
+  const handlerAddImage = () => {
+    const url = prompt('URL');
+    url && addImage(url);
   };
 
   const handleAttachFile = (evt) => {
@@ -91,7 +110,10 @@ const TextEditor = ({ onSubmit, isLoading }) => {
           />
         </div>
         <InlineStyleControls onToggle={toggleInlineStyle} />
-        <StyleButton onToggle={handlerAddLink} style="link" label="Вставить ссылку" />
+        <div className="editor__controls-wrapper">
+          <StyleButton onToggle={handlerAddLink} style="link" label="Вставить ссылку" />
+          <StyleButton onToggle={handlerAddImage} style="image" label="Вставить изображение" />
+        </div>
       </div>
       <div className="editor__text-area" onClick={focusOnInput}>
         <Editor
@@ -106,7 +128,7 @@ const TextEditor = ({ onSubmit, isLoading }) => {
         ref={fileInputRef}
         onChange={handleAttachFile}
       ></input>
-      <div className='editor__submit-btns'>
+      <div className="editor__submit-btns">
         <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
           Опубликовать
         </Button>

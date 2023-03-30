@@ -42,14 +42,20 @@ export const stateToHtml = convertToHTML({
     }
   },
   entityToHTML: (entity, text) => {
-    if (entity.type === 'link') {
-      return (
-        <a href={entity.data.url} target="_blank" rel="noreferrer">
-          {text}
-        </a>
-      );
+    switch (entity.type) {
+      case 'link':
+        return (
+          <a href={entity.data.url} target="_blank" rel="noreferrer">
+            {text}
+          </a>
+        );
+        case 'image':
+          return (
+            <img src={entity.data.url} />
+          );
+      default:
+        return text;
     }
-    return text;
   },
 });
 
@@ -86,14 +92,20 @@ export const htmlToState = convertFromHTML({
       case 'div':
       case 'p':
         return 'default';
+      case 'figure':
+        return 'atomic';
       default:
         return null;
     }
   },
   htmlToEntity: (nodeName, node, createEntity) => {
-    if (nodeName === 'a' && node.href) {
-      return createEntity('link', 'MUTABLE', { url: node.href });
+    switch (nodeName) {
+      case 'a':
+        return createEntity('link', 'MUTABLE', { url: node.href });
+      case 'img':
+        return createEntity('image', 'IMMUTABLE', { url: node.src });
+      default:
+        return undefined;
     }
-    return undefined;
   },
 });
