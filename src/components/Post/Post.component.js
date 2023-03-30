@@ -35,7 +35,7 @@ const Post = ({ post, onDeletePost, isPreview }) => {
       <div className="post__info">
         <p className="post__author">Автор: {name}</p>
         {!isPreview && currentUser._id === ownerId && (
-          <div>
+          <div className="post__buttons">
             <Button buttonType={BUTTON_TYPE_CLASSES.pen} onClick={postEdit} title="Редактировать" />
             <Button
               buttonType={BUTTON_TYPE_CLASSES.trash}
