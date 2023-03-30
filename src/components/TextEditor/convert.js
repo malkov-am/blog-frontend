@@ -49,10 +49,8 @@ export const stateToHtml = convertToHTML({
             {text}
           </a>
         );
-        case 'image':
-          return (
-            <img src={entity.data.url} />
-          );
+      case 'image':
+        return <img src={entity.data.url} className="post__image" />;
       default:
         return text;
     }

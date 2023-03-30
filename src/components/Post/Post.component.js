@@ -26,7 +26,9 @@ const Post = ({ post, onDeletePost, isPreview }) => {
         {filename && (
           <>
             <p className="post__attachment">Прикрепленный файл: </p>
-            <a href={filelink}>{filename}</a>
+            <a href={filelink} target="_blank" rel="noreferrer">
+              {filename}
+            </a>
           </>
         )}
       </div>

@@ -64,10 +64,10 @@ const TextEditor = ({ onSubmit, isLoading }) => {
       const contentState = currentState.getCurrentContent();
       const contentStateWithEntity = contentState.createEntity(entityType, mutability, data);
       const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-      const newState = EditorState.set( editorState, { currentContent: contentStateWithEntity });
+      const newState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
       return AtomicBlockUtils.insertAtomicBlock(newState, entityKey, ' ');
-  });
-};
+    });
+  };
 
   const addLink = (url) => {
     return addEntity('link', { url }, 'MUTABLE');
@@ -89,54 +89,59 @@ const TextEditor = ({ onSubmit, isLoading }) => {
 
   const handleAttachFile = (evt) => {
     setFile(evt.target.files[0]);
-  }
+  };
 
   const handleOpenPreview = () => {
     const content = stateToHtml(editorState.getCurrentContent());
-     setPostPreview({ owner: currentUser, content, _id: null });
-  }
+    setPostPreview({ owner: currentUser, content, _id: null });
+  };
 
   return (
     <>
-    <Post post={postPreview} isPreview={true} />
-    <div className="editor">
-      <div className="editor__controls">
-        <div className="editor__controls-block-wrapper">
-          <BlockStyleControls onToggle={toggleBlockType} />
-          <Button
-            buttonType={BUTTON_TYPE_CLASSES.close}
-            label="Закрыть"
-            onClick={() => navigate(-1)}
+      <Post post={postPreview} isPreview={true} />
+      <div className="editor">
+        <div className="editor__controls">
+          <div className="editor__controls-block-wrapper">
+            <BlockStyleControls onToggle={toggleBlockType} />
+            <Button
+              buttonType={BUTTON_TYPE_CLASSES.close}
+              label="Закрыть"
+              onClick={() => navigate(-1)}
+            />
+          </div>
+          <InlineStyleControls onToggle={toggleInlineStyle} />
+          <div className="editor__controls-wrapper">
+            <StyleButton onToggle={handlerAddLink} style="link" label="Вставить ссылку" />
+            <StyleButton onToggle={handlerAddImage} style="image" label="Вставить изображение" />
+          </div>
+        </div>
+        <div className="editor__text-area" onClick={focusOnInput}>
+          <Editor
+            editorState={editorState}
+            onChange={(editorState) => setEditorState(editorState)}
+            ref={editor}
+            placeholder="Введите текст:"
           />
         </div>
-        <InlineStyleControls onToggle={toggleInlineStyle} />
-        <div className="editor__controls-wrapper">
-          <StyleButton onToggle={handlerAddLink} style="link" label="Вставить ссылку" />
-          <StyleButton onToggle={handlerAddImage} style="image" label="Вставить изображение" />
+        <input
+          className="editor__file-input"
+          type="file"
+          ref={fileInputRef}
+          onChange={handleAttachFile}
+        ></input>
+        <div className="editor__submit-btns">
+          <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
+            Опубликовать
+          </Button>
+          <Button
+            buttonType={BUTTON_TYPE_CLASSES.sizeLTransparent}
+            onClick={handleOpenPreview}
+            isDisabled={isLoading}
+          >
+            Предпросмотр
+          </Button>
         </div>
       </div>
-      <div className="editor__text-area" onClick={focusOnInput}>
-        <Editor
-          editorState={editorState}
-          onChange={(editorState) => setEditorState(editorState)}
-          ref={editor}
-        />
-      </div>
-      <input
-        className="editor__file-input"
-        type="file"
-        ref={fileInputRef}
-        onChange={handleAttachFile}
-      ></input>
-      <div className="editor__submit-btns">
-        <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
-          Опубликовать
-        </Button>
-        <Button buttonType={BUTTON_TYPE_CLASSES.sizeLTransparent} onClick={handleOpenPreview} isDisabled={isLoading}>
-          Предпросмотр
-        </Button>
-      </div>
-    </div>
     </>
   );
 };
