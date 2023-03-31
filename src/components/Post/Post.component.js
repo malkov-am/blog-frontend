@@ -8,7 +8,7 @@ const Post = ({ post, onDeletePost, isPreview }) => {
   const currentUser = useContext(CurrentUserContext);
   const navigate = useNavigate();
   if (!post) return null;
-  const { owner, content, _id: postId, filename, filelink } = post;
+  const { owner, content, filename, filelink } = post;
   const { name, _id: ownerId } = owner;
 
   const postEdit = () => {
@@ -16,7 +16,7 @@ const Post = ({ post, onDeletePost, isPreview }) => {
   };
 
   const postDelete = () => {
-    onDeletePost(postId);
+    onDeletePost(post);
   };
 
   return (

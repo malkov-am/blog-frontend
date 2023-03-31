@@ -17,6 +17,8 @@ const TextEditor = ({ onSubmit, isLoading }) => {
   const navigate = useNavigate();
   const post = location.state?.post;
   const postId = post?._id;
+  const pubdate = post?.pubdate.slice(0, 10);
+  const currentDate = new Date().toISOString().slice(0, 10);
   const decorator = new CompositeDecorator([LinkDecorator, ImageDecorator]);
 
   const [file, setFile] = useState('');
@@ -26,6 +28,8 @@ const TextEditor = ({ onSubmit, isLoading }) => {
       : EditorState.createEmpty(decorator),
   );
   const [postPreview, setPostPreview] = useState(null);
+  const [dateCheckbox, setDateCheckbox] = useState(currentDate < pubdate ? true : false);
+  const [date, setDate] = useState(pubdate || currentDate);
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -44,9 +48,9 @@ const TextEditor = ({ onSubmit, isLoading }) => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
-  const submit = () => {
+  const handleSubmit = () => {
     const content = stateToHtml(editorState.getCurrentContent());
-    onSubmit(content, postId, file);
+    onSubmit(content, postId, file, date, post);
   };
 
   const addEntity = (entityType, data, mutability) => {
@@ -96,6 +100,21 @@ const TextEditor = ({ onSubmit, isLoading }) => {
     setPostPreview({ owner: currentUser, content, _id: null });
   };
 
+  const handleCheckboxCheck = () => {
+    setDateCheckbox((currentState) => {
+      if (currentState === true) {
+        setDate(currentDate);
+        return false;
+      } else {
+        return true;
+      }
+    });
+  };
+
+  const handleSetDate = (evt) => {
+    setDate(evt.target.value);
+  };
+
   return (
     <>
       <Post post={postPreview} isPreview={true} />
@@ -123,14 +142,36 @@ const TextEditor = ({ onSubmit, isLoading }) => {
             placeholder="Введите текст:"
           />
         </div>
-        <input
-          className="editor__file-input"
-          type="file"
-          ref={fileInputRef}
-          onChange={handleAttachFile}
-        ></input>
+        <div className="editor__inputs">
+          <input
+            className="editor__file-input"
+            type="file"
+            ref={fileInputRef}
+            onChange={handleAttachFile}
+          />
+          <label className="editor__checkbox-input-label">
+            <input
+              type="checkbox"
+              className="editor__checkbox-input"
+              onChange={handleCheckboxCheck}
+              checked={dateCheckbox}
+            />
+            Отложить публикацию?
+            <input
+              className="editor__date-input"
+              type="date"
+              disabled={!dateCheckbox}
+              value={date}
+              onChange={handleSetDate}
+            />
+          </label>
+        </div>
         <div className="editor__submit-btns">
-          <Button buttonType={BUTTON_TYPE_CLASSES.sizeL} onClick={submit} isLoading={isLoading}>
+          <Button
+            buttonType={BUTTON_TYPE_CLASSES.sizeL}
+            onClick={handleSubmit}
+            isLoading={isLoading}
+          >
             Опубликовать
           </Button>
           <Button

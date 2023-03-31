@@ -24,7 +24,7 @@
   &__controls-wrapper {
     display: flex;
     flex-direction: row;
-    gap: 3px;;
+    gap: 3px;
   }
 
   &__text-area {
@@ -36,7 +36,17 @@
     overflow: scroll;
   }
 
+  &__inputs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+  }
+
   &__file-input {
+    flex-grow: 1;
     &::file-selector-button {
       appearance: none;
       border: none;
@@ -45,6 +55,21 @@
       width: 32px;
       height: 32px;
       color: rgba(0, 0, 0, 0);
+    }
+  }
+
+  &__checkbox-input {
+    width: 25px;
+    height: 25px;
+
+    &-label {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-left: 3px;
+      gap: 10px;
+      font-size: 16px;
+      line-height: 18px;
     }
   }
 

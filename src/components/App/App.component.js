@@ -1,6 +1,5 @@
 import { Route, Routes, useNavigate } from 'react-router';
 import Header from '../Header/Header.component';
-import Posts from '../Posts/Posts.component';
 import Login from '../Login/Login.component';
 import Register from '../Register/Register.component';
 import TextEditor from '../TextEditor/TextEditor.component';
@@ -13,6 +12,7 @@ import {
   deletePost,
   editPost,
   getPosts,
+  getDeferredPosts,
   register,
 } from '../../utils/Api';
 import { UNAUTHORIZED_ERROR_CODE, POPUP_DELAY_TIME } from '../../utils/constants';
@@ -21,12 +21,16 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { firebaseConfig } from '../../utils/firebase';
 import { initializeApp } from 'firebase/app';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import Main from '../Main/Main.component';
+import Posts from '../Posts/Posts.component';
 
 function App() {
   // Переменные состояния
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [posts, setPosts] = useState([]);
+  const [deferredPosts, setDeferredPosts] = useState([]);
   const [infoPopupMessage, setInfoPopupMessage] = useState('');
   const [infoPopupType, setInfoPopupType] = useState('');
   const [isInfoPopupShown, setIsInfoPopupShown] = useState(false);
@@ -39,6 +43,9 @@ function App() {
   // Firebase storage
   const firebaseApp = initializeApp(firebaseConfig);
   const storage = getStorage();
+
+  // Получение текущей даты
+  const currentDate = new Date().toISOString().slice(0, 10);
 
   // Чтение локального хранилища
   const token = localStorage.getItem('token');
@@ -56,6 +63,17 @@ function App() {
       })
       .finally(() => setIsLoadingPosts(false));
   }, []);
+
+  useEffect(() => {
+    isLoggedIn &&
+      getDeferredPosts(token)
+        .then((deferredPosts) => {
+          setDeferredPosts(deferredPosts.reverse());
+        })
+        .catch((err) => {
+          handleError(err);
+        });
+  }, [isLoggedIn]);
 
   // Обработчик проверки токена
   function handleTokenCheck(token) {
@@ -129,37 +147,61 @@ function App() {
     setIsLoading(true);
     createPost(postData, token)
       .then((newPost) => {
-        setPosts([newPost, ...posts]);
+        if (currentDate >= newPost.pubdate.slice(0, 10)) {
+          setPosts([newPost, ...posts]);
+          navigate('/');
+        } else {
+          setDeferredPosts([newPost, ...deferredPosts]);
+          navigate('/deferred');
+        }
         showInfoPopup('success', 'Пост опубликован');
-        navigate('/');
       })
       .catch((err) => handleError(err))
       .finally(() => setIsLoading(false));
   };
 
   // Обработчик редактирования поста
-  const handleEditPost = (postData, postId) => {
+  const handleEditPost = (postData, postId, originalPost) => {
     setIsLoading(true);
     editPost(postData, postId, token)
       .then((updatedPost) => {
-        setPosts(posts.map((post) => (post._id === postId ? updatedPost : post)));
+        if (currentDate >= originalPost.pubdate.slice(0, 10)) {
+          if (currentDate >= updatedPost.pubdate.slice(0, 10)) {
+            setPosts(posts.map((post) => (post._id === postId ? updatedPost : post)));
+            navigate('/');
+          } else {
+            setPosts(posts.filter((post) => post._id !== postId));
+            setDeferredPosts([updatedPost, ...deferredPosts]);
+            navigate('/deferred');
+          }
+        } else {
+          if (currentDate >= updatedPost.pubdate.slice(0, 10)) {
+            setPosts([updatedPost, ...posts]);
+            setDeferredPosts(deferredPosts.filter((post) => post._id !== postId));
+            navigate('/');
+          } else {
+            setDeferredPosts(
+              deferredPosts.map((post) => (post._id === postId ? updatedPost : post)),
+            );
+            navigate('/deferred');
+          }
+        }
         showInfoPopup('success', 'Пост отредактирован');
-        navigate('/');
       })
       .catch((err) => handleError(err))
       .finally(() => setIsLoading(false));
   };
 
-  const handlePost = (postData, postId) => {
+  const handlePost = (postData, postId, originalPost) => {
     if (postId) {
-      handleEditPost(postData, postId);
+      handleEditPost(postData, postId, originalPost);
     } else {
       handleCreatePost(postData);
     }
   };
 
   // Обработчик отправки формы текстового редактора
-  const handleTextEditorSubmit = (content, postId, file) => {
+  const handleTextEditorSubmit = (content, postId, file, pubdate, originalPost) => {
     if (file) {
       const storageRef = ref(storage, `/files/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -171,22 +213,27 @@ function App() {
         },
         function () {
           getDownloadURL(uploadTask.snapshot.ref).then((filelink) => {
-            const postData = { content, filename: file.name, filelink };
-            handlePost(postData, postId);
+            const postData = { content, filename: file.name, filelink, pubdate };
+            handlePost(postData, postId, originalPost);
           });
         },
       );
     } else {
-      const postData = { content };
-      handlePost(postData, postId);
+      const postData = { content, pubdate };
+      handlePost(postData, postId, originalPost);
     }
   };
 
   // Обработчик удаления поста
-  const handleDeletePost = (postId) => {
+  const handleDeletePost = (post) => {
+    const { _id: postId, pubdate } = post;
     deletePost(postId, token)
       .then(() => {
-        setPosts(posts.filter((post) => post._id !== postId));
+        if (currentDate >= pubdate.slice(0, 10)) {
+          setPosts(posts.filter((post) => post._id !== postId));
+        } else {
+          setDeferredPosts(deferredPosts.filter((post) => post._id !== postId));
+        }
         showInfoPopup('success', 'Пост удален');
       })
       .catch((err) => handleError(err));
@@ -196,17 +243,18 @@ function App() {
   if (isLoggedIn === undefined) return null;
 
   return (
-    <div className="page">
+    <div className="app">
       <CurrentUserContext.Provider value={currentUser}>
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-        <main className="main">
+        <main className="page">
           <Routes>
             <Route
               exact
               path="/"
               element={
-                <Posts
+                <Main
                   posts={posts}
+                  deferredPosts={deferredPosts}
                   isLoggedIn={isLoggedIn}
                   onDeletePost={handleDeletePost}
                   isLoadingPosts={isLoadingPosts}
@@ -234,7 +282,24 @@ function App() {
             <Route
               exact
               path="/edit"
-              element={<TextEditor onSubmit={handleTextEditorSubmit} isLoading={isLoading} />}
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <TextEditor onSubmit={handleTextEditorSubmit} isLoading={isLoading} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/deferred"
+              element={
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <Posts
+                    posts={deferredPosts}
+                    onDeletePost={handleDeletePost}
+                    isLoadingPosts={isLoadingPosts}
+                  />
+                </ProtectedRoute>
+              }
             />
           </Routes>
         </main>

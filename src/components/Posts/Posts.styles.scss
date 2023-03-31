@@ -3,35 +3,4 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-
-  &__notification {
-    color: grey;
-  }
-
-  &__btn {
-    background-color: #e64980;
-    color: white;
-    width: 200px;
-    height: 40px;
-    border-radius: 10px;
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: 400;
-    cursor: pointer;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: opacity 0.4s linear;
-
-    &:hover {
-      opacity: 0.8;
-    }
-
-    &:active {
-      box-shadow: none;
-      background-color: #d6336c;
-    }
-  }
 }

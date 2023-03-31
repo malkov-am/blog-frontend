@@ -1,4 +1,5 @@
-export const BASE_URL = 'https://us-central1-blog-cf814.cloudfunctions.net/app';
+export const BASE_URL = 'http://localhost:3001';
+// export const BASE_URL = 'https://us-central1-blog-cf814.cloudfunctions.net/app';
 
 // Обработка ответа с сервера
 function handleResponse(res) {
@@ -33,6 +34,17 @@ export const checkToken = (token) => {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => handleResponse(res));
+};
+
+// Получение постов с отложенной датой публикации
+export const getDeferredPosts = (token) => {
+  return fetch(`${BASE_URL}/posts/deferred`, {
+    method: 'GET',
+    headers: {
+      authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     },
   }).then((res) => handleResponse(res));
 };
