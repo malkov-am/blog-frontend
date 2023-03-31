@@ -1,5 +1,4 @@
-export const BASE_URL = 'http://localhost:3001';
-// export const BASE_URL = 'https://us-central1-blog-cf814.cloudfunctions.net/app';
+export const BASE_URL = 'https://us-central1-blog-cf814.cloudfunctions.net/app';
 
 // Обработка ответа с сервера
 function handleResponse(res) {
