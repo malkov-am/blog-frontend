@@ -1,3 +1,6 @@
+/**
+ * @module Post
+ */
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';

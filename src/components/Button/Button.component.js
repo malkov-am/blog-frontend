@@ -1,3 +1,6 @@
+/**
+ * @module Button
+ */
 import clsx from 'clsx';
 import React from 'react';
 import Spinner from '../Spinner/Spinner';

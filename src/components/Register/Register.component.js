@@ -1,3 +1,6 @@
+/**
+ * @module Register
+ */
 import React, { useEffect } from 'react';
 import SignForm from '../SignForm/SignForm.component';
 import { Navigate, useNavigate } from 'react-router-dom';

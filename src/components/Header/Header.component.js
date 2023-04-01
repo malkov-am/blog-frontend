@@ -1,3 +1,6 @@
+/**
+ * @module Header
+ */
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';

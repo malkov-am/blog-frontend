@@ -1,3 +1,6 @@
+/**
+ * @module App
+ */
 import { Route, Routes, useNavigate } from 'react-router';
 import Header from '../Header/Header.component';
 import Login from '../Login/Login.component';
@@ -26,7 +29,9 @@ import Main from '../Main/Main.component';
 import Posts from '../Posts/Posts.component';
 
 function App() {
-  // Переменные состояния
+  /**
+   * Переменные состояния.
+   */
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [posts, setPosts] = useState([]);
@@ -37,20 +42,30 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
 
-  // Хуки
+  /**
+   * Используемые хуки.
+   */
   const navigate = useNavigate();
 
-  // Firebase storage
+  /**
+   * Инициализация Firebase.
+   */
   const firebaseApp = initializeApp(firebaseConfig);
   const storage = getStorage();
 
-  // Получение текущей даты
+  /**
+   * Получение текущей даты.
+   */
   const currentDate = new Date().toISOString().slice(0, 10);
 
-  // Чтение локального хранилища
+  /**
+   * Чтение локального хранилища.
+   */
   const token = localStorage.getItem('token');
 
-  // Действия при загрузке приложения: проверяем токен
+  /**
+   * Действия при загрузке приложения: проверяем токен.
+   */
   useEffect(() => {
     token ? handleTokenCheck(token) : setIsLoggedIn(false);
     setIsLoadingPosts(true);
@@ -64,6 +79,9 @@ function App() {
       .finally(() => setIsLoadingPosts(false));
   }, []);
 
+  /**
+   * Действия при логине пользователя: получение постов с отложенной датой публикации.
+   */
   useEffect(() => {
     isLoggedIn &&
       getDeferredPosts(token)
@@ -75,7 +93,10 @@ function App() {
         });
   }, [isLoggedIn]);
 
-  // Обработчик проверки токена
+  /**
+   * Обработчик проверки токена пользователя.
+   * @param {string} token - Токен.
+   */
   function handleTokenCheck(token) {
     checkToken(token)
       .then((userData) => {
@@ -87,7 +108,10 @@ function App() {
       });
   }
 
-  // Обработка ошибок
+  /**
+   * Функция обработки ошибок.
+   * @param {object} err - Объект с ошибкой.
+   */
   function handleError(err) {
     err.message
       ? showInfoPopup('error', err.message)
@@ -99,7 +123,11 @@ function App() {
     if (err.status === UNAUTHORIZED_ERROR_CODE) handleLogout();
   }
 
-  // Отобразить попап
+  /**
+   * Функция отображения информационного попапа.
+   * @param {string} type - Тип попапа: 'success' или 'error'.
+   * @param {string} message - Выводимое сообщение.
+   */
   function showInfoPopup(type, message) {
     setInfoPopupType(type);
     setInfoPopupMessage(message);
@@ -107,7 +135,13 @@ function App() {
     setTimeout(() => setIsInfoPopupShown(false), POPUP_DELAY_TIME);
   }
 
-  // Обработчик логина
+  /**
+   * Обработчик логина пользователя.
+   * @param {object} userData - Объект с регистрационными данными пользователя.
+   * Включает в себя поля:
+   * email {string} - E-mail адрес пользователя.
+   * password {string} - Пароль пользователя.
+   */
   function handleLogin(userData) {
     setIsLoading(true);
     authorize(userData)
@@ -122,7 +156,14 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
-  // Обработчик регистрации
+  /**
+   * Обработчик регистрации нового пользователя.
+   * @param {object} userData - Объект с регистрационными данными пользователя.
+   * Включает в себя поля:
+   * email {string} - E-mail адрес пользователя.
+   * password {string} - Пароль пользователя.
+   * name {string} - Имя пользователя.
+   */
   function handleRegister(userData) {
     const { email, password } = userData;
     setIsLoading(true);
@@ -134,7 +175,9 @@ function App() {
       .finally(() => setIsLoading(false));
   }
 
-  // Обработчик выхода из профиля
+  /**
+   * Обработчик выхода из профиля.
+   */
   function handleLogout() {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -143,7 +186,10 @@ function App() {
     navigate('/signin');
   }
 
-  // Обработчик публикации нового поста
+  /**
+   * Обработчик публикации нового поста.
+   * @param {string} postData - Строка с HTML-разметкой контента поста.
+   */
   const handleCreatePost = (postData) => {
     createPost(postData, token)
       .then((newPost) => {
@@ -159,7 +205,12 @@ function App() {
       .finally(() => setIsLoading(false));
   };
 
-  // Обработчик редактирования поста
+  /**
+   * Обработчик редактирования поста.
+   * @param {string} postData - Строка с HTML-разметкой контента поста.
+   * @param {string} postId - Строка с id редактируемого поста.
+   * @param {object} originalPost - Объект с редактируемым постом.
+   */
   const handleEditPost = (postData, postId, originalPost) => {
     editPost(postData, postId, token)
       .then((updatedPost) => {
@@ -187,6 +238,12 @@ function App() {
       .finally(() => setIsLoading(false));
   };
 
+  /**
+   * Вспомогательная функция отправки формы текстового редактора.
+   * @param {string} postData - Строка с HTML-разметкой контента поста.
+   * @param {string} postId - Строка с id редактируемого поста.
+   * @param {object} originalPost - Объект с редактируемым постом.
+   */
   const handlePost = (postData, postId, originalPost) => {
     if (postId) {
       handleEditPost(postData, postId, originalPost);
@@ -195,6 +252,11 @@ function App() {
     }
   };
 
+  /**
+   * Функция загрузки прикрепленного файла.
+   * @param {object} file - Объект с прикрепляемым файлом.
+   * @returns {string} - Ссылка на загруженный файл
+   */
   const uploadFile = (file) => {
     const storageRef = ref(storage, `/files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -212,7 +274,14 @@ function App() {
     });
   };
 
-  // Обработчик отправки формы текстового редактора
+  /**
+   * Обработчик отправки формы текстового редактора.
+   * @param {string} content - Строка с HTML-разметкой контента поста.
+   * @param {string} postId - Опциональная строка с id редактируемого поста.
+   * @param {object} file - Объект с прикрепляемым файлом.
+   * @param {string} pubdate - Строка с датой, в которую должен быть опубликован пост в формате ГГГГ-ММ-ДД.
+   * @param {object} originalPost - Объект с редактируемым постом.
+   */
   const handleTextEditorSubmit = (content, postId, file, pubdate, originalPost) => {
     setIsLoading(true);
     if (file) {
@@ -228,7 +297,10 @@ function App() {
     }
   };
 
-  // Обработчик удаления поста
+  /**
+   * Обработчик удаления поста.
+   * @param {object} post - Объект с удаляемым постом.
+   */
   const handleDeletePost = (post) => {
     const { _id: postId, pubdate } = post;
     deletePost(postId, token)
@@ -243,7 +315,9 @@ function App() {
       .catch((err) => handleError(err));
   };
 
-  // Не рендерим страницу, пока не получили пользователя
+  /**
+   * Не рендерим страницу, пока не получили пользователя.
+   */
   if (isLoggedIn === undefined) return null;
 
   return (

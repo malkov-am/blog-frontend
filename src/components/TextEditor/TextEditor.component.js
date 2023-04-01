@@ -1,3 +1,6 @@
+/**
+ * @module TextEditor
+ */
 import { Editor, EditorState, RichUtils, AtomicBlockUtils, CompositeDecorator } from 'draft-js';
 import { useContext, useRef, useState } from 'react';
 import BlockStyleControls from './BlockStyleControls/BlockStyleControls.component';

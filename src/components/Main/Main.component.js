@@ -1,3 +1,6 @@
+/**
+ * @module Main
+ */
 import React from 'react';
 import './Main.styles.scss';
 import { Link } from 'react-router-dom';

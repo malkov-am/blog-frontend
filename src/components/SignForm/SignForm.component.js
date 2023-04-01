@@ -1,3 +1,6 @@
+/**
+ * @module SignForm
+ */
 import React from 'react';
 import './SignForm.styles.scss';
 

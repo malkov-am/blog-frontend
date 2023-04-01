@@ -1,3 +1,6 @@
+/**
+ * @module Spinner
+ */
 import React from 'react';
 import './Spinner.scss';
 
