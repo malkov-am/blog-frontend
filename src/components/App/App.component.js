@@ -138,22 +138,21 @@ function App() {
   function handleLogout() {
     localStorage.clear();
     setIsLoggedIn(false);
+    setDeferredPosts([]);
     setCurrentUser({});
     navigate('/signin');
   }
 
   // Обработчик публикации нового поста
   const handleCreatePost = (postData) => {
-    setIsLoading(true);
     createPost(postData, token)
       .then((newPost) => {
         if (currentDate >= newPost.pubdate.slice(0, 10)) {
           setPosts([newPost, ...posts]);
-          navigate('/');
         } else {
           setDeferredPosts([newPost, ...deferredPosts]);
-          navigate('/deferred');
         }
+        navigate('/');
         showInfoPopup('success', 'Пост опубликован');
       })
       .catch((err) => handleError(err))
@@ -162,30 +161,26 @@ function App() {
 
   // Обработчик редактирования поста
   const handleEditPost = (postData, postId, originalPost) => {
-    setIsLoading(true);
     editPost(postData, postId, token)
       .then((updatedPost) => {
         if (currentDate >= originalPost.pubdate.slice(0, 10)) {
           if (currentDate >= updatedPost.pubdate.slice(0, 10)) {
             setPosts(posts.map((post) => (post._id === postId ? updatedPost : post)));
-            navigate('/');
           } else {
             setPosts(posts.filter((post) => post._id !== postId));
             setDeferredPosts([updatedPost, ...deferredPosts]);
-            navigate('/deferred');
           }
         } else {
           if (currentDate >= updatedPost.pubdate.slice(0, 10)) {
             setPosts([updatedPost, ...posts]);
             setDeferredPosts(deferredPosts.filter((post) => post._id !== postId));
-            navigate('/');
           } else {
             setDeferredPosts(
               deferredPosts.map((post) => (post._id === postId ? updatedPost : post)),
             );
-            navigate('/deferred');
           }
         }
+        navigate('/');
         showInfoPopup('success', 'Пост отредактирован');
       })
       .catch((err) => handleError(err))
@@ -200,24 +195,33 @@ function App() {
     }
   };
 
-  // Обработчик отправки формы текстового редактора
-  const handleTextEditorSubmit = (content, postId, file, pubdate, originalPost) => {
-    if (file) {
-      const storageRef = ref(storage, `/files/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      return uploadTask.on(
+  const uploadFile = (file) => {
+    const storageRef = ref(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
         'state_changed',
         function (snapshot) {},
         function (err) {
-          handleError(err);
+          reject(err);
         },
         function () {
-          getDownloadURL(uploadTask.snapshot.ref).then((filelink) => {
-            const postData = { content, filename: file.name, filelink, pubdate };
-            handlePost(postData, postId, originalPost);
-          });
+          return getDownloadURL(uploadTask.snapshot.ref).then((filelink) => resolve(filelink));
         },
       );
+    });
+  };
+
+  // Обработчик отправки формы текстового редактора
+  const handleTextEditorSubmit = (content, postId, file, pubdate, originalPost) => {
+    setIsLoading(true);
+    if (file) {
+      uploadFile(file)
+        .then((filelink) => {
+          const postData = { content, filename: file.name, filelink, pubdate };
+          handlePost(postData, postId, originalPost);
+        })
+        .catch((err) => handleError(err));
     } else {
       const postData = { content, pubdate };
       handlePost(postData, postId, originalPost);
